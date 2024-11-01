@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  komga:
+    image: gotson/komga
+    container_name: komga
+    volumes:
+      - config:/config
+      - /home/archetto/komga:/data
+    ports:
+      - 25600:25600
+    networks:
+      - frp_vnet
+    restart: unless-stopped
+volumes:
+  config:
+networks:
+  frp_vnet:
+    external: true

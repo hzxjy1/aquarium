@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  mcsmanager:
+    build:
+      context: ./nmcsm
+    ports:
+      - "24444:24444"
+    volumes:
+      - data:/work/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+  server:
+    build:
+      context: ./mc-server
+    volumes:
+      - /opt/new-minecraft:/work
+    ports:
+      - "25565:25565"
+    restart: always
+  frp:
+    build:
+      context: ./frp
+    volumes:
+      - ./frpc_cb.toml:/frpc.toml
+    restart: always
+volumes:
+  data:

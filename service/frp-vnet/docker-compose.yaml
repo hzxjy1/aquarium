@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  frp_vnet:
+    build:
+      context: ./frp
+    volumes:
+      - ./frpc.toml:/frpc.toml
+    networks:
+      - frp_vnet
+    restart: "always"
+  host_ssh:
+    build:
+      context: ./frp
+    volumes:
+      - ./host_frpc.toml:/frpc.toml
+    network_mode: host
+    restart: "always"
+networks:
+  frp_vnet:
+    external: true
