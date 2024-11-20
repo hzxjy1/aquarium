@@ -14,6 +14,8 @@ FROM node:22-alpine
 EXPOSE 24444
 EXPOSE 25565
 
+ARG ZULU_KEY_SHA256=6c6393d4755818a15cf055a5216cffa599f038cd508433faed2226925956509a
+
 WORKDIR /work
 
 VOLUME ["/world"]
@@ -26,7 +28,10 @@ RUN apk update && \
     rm -rf mcsmanager_linux_release.tar.gz start-daemon.sh start-web.sh usage.txt web && \
     mv daemon/* . && \
     rmdir daemon/ && \
-    npm install
+    npm install && \
+    wget --quiet https://cdn.azul.com/public_keys/alpine-signing@azul.com-5d5dc44c.rsa.pub -P /etc/apk/keys/ && \
+    echo "${ZULU_KEY_SHA256}  /etc/apk/keys/alpine-signing@azul.com-5d5dc44c.rsa.pub" | sha256sum -c - && \
+    apk --repository https://repos.azul.com/zulu/alpine --no-cache add zulu21-jre-headless~=21.0.5 tzdata
 
 COPY --from=go-builder /go/src/app/rcon-cli-master/gorcon /usr/bin
 

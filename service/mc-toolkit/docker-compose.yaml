@@ -9,12 +9,19 @@ services:
     volumes:
       - data:/work/data
       - /var/run/docker.sock:/var/run/docker.sock
+      - /home/syaro/new-minecraft:/world
+    restart: always
+  web:
+    build:
+      context: ./nmcsm/web
+    ports:
+      - "23333:23333"
     restart: always
   server:
     build:
       context: ./mc-server
     volumes:
-      - /opt/new-minecraft:/work
+      - /home/syaro/new-minecraft:/work
     ports:
       - "25565:25565"
     restart: always
